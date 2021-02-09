@@ -14,8 +14,6 @@ DEVICE_HOST = '192.168.91.197'
 DEVICE_ID = '1000bb772d'
 DEVICE_KEY = '1edc4fd4-2a9e-411a-b9e5-43bb9adcf4e2'
 
-LOCAL_HEADERS = {'Connection': 'close'}
-
 def pad(data_to_pad: bytes, block_size: int):
     padding_len = block_size - len(data_to_pad) % block_size
     padding = bytes([padding_len]) * padding_len
@@ -43,19 +41,16 @@ def encrypt(payload: dict, devicekey: str):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print('Usage: python3 basicr2.py on|off')
+        print('Usage: python3 sonoff-basicr2.py on|off')
         exit(0)
         
     if sys.argv[1] == 'on' or sys.argv[1] == 'off':
+        function = 'switch'
         data = { 'switch' : sys.argv[1] }
     else:
         print('Invalid command: {sys.argv[1]}')
 
-
     sequence = str(int(time.time() * 1000))
-    timeout = 5
-
-    command = next(iter(data))
 
     payload = {
         'sequence': sequence,
@@ -68,6 +63,7 @@ if __name__ == "__main__":
     
     payload = encrypt(payload, DEVICE_KEY)
     
-    resp = requests.post(f"http://{DEVICE_HOST}:8081/zeroconf/{command}", json=payload, headers=LOCAL_HEADERS, timeout=timeout)
+    resp = requests.post(f"http://{DEVICE_HOST}:8081/zeroconf/{function}", 
+            json=payload, headers={'Connection': 'close'}, timeout=5)
     
     print(resp.json())
