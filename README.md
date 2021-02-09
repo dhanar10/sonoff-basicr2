@@ -7,8 +7,8 @@ A simple python script for controlling SONOFF BASICR2
 Set DEVICE_HOST, DEVICE_ID, and DEVICE_KEY inside the script (see https://github.com/AlexxIT/SonoffLAN#getting-devicekey-manually)
 
 ```bash
-$ python3 sonoff-basicr2 on
-$ python3 sonoff-basicr2 off
+$ python3 sonoff-basicr2.py on
+$ python3 sonoff-basicr2.py off
 ```
 
 # Credits
