@@ -10,6 +10,7 @@ Set DEVICE_HOST, DEVICE_ID, and DEVICE_KEY inside the script (see https://github
 $ python3 sonoff-basicr2.py switch on
 $ python3 sonoff-basicr2.py switch off
 $ python3 sonoff-basicr2.py wifi SSID PASSWORD
+$ python3 sonoff-basicr2.py web
 ```
 
 ## Credits
