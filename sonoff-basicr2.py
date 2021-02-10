@@ -110,6 +110,7 @@ if __name__ == "__main__":
         print('Usage:')
         print('python3 sonoff-basicr2.py switch on|off')
         print('python3 sonoff-basicr2.py wifi SSID PASSWORD')
+        print('python3 sonoff-basicr2.py web')
         exit(0)
         
     command = sys.argv[1]
