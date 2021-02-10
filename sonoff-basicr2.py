@@ -10,7 +10,7 @@ from Crypto.Cipher import AES
 from Crypto.Hash import MD5
 from Crypto.Random import get_random_bytes
 
-DEVICE_HOST = '192.168.91.197'
+DEVICE_HOST = '10.100.7.101' # MAC Address D8:F1:5B:B2:74:A5
 DEVICE_ID = '1000bb772d'
 DEVICE_KEY = '1edc4fd4-2a9e-411a-b9e5-43bb9adcf4e2'
 
@@ -41,14 +41,20 @@ def encrypt(payload: dict, devicekey: str):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print('Usage: python3 sonoff-basicr2.py on|off')
+        print('Usage:')
+        print('python3 sonoff-basicr2.py switch on|off')
+        print('python3 sonoff-basicr2.py wifi SSID PASSWORD')
         exit(0)
         
-    if sys.argv[1] == 'on' or sys.argv[1] == 'off':
-        function = 'switch'
-        data = { 'switch' : sys.argv[1] }
+    command = sys.argv[1]
+    
+    if command == 'switch' and (sys.argv[2] == 'on' or sys.argv[2] == 'off'):
+        data = { 'switch' : sys.argv[2] }
+    elif command == 'wifi' and len(sys.argv) == 4:
+        data = { 'ssid': sys.argv[2], 'password': sys.argv[3] }
     else:
-        print('Invalid command: {sys.argv[1]}')
+        print('Invalid arguments')
+        exit(1)
 
     sequence = str(int(time.time() * 1000))
 
@@ -59,11 +65,14 @@ if __name__ == "__main__":
         'data': data
     }
     
+    url = f"http://{DEVICE_HOST}:8081/zeroconf/{command}"
+    
+    print(url)
     print(payload)
     
-    payload = encrypt(payload, DEVICE_KEY)
+    epayload = encrypt(payload, DEVICE_KEY)
     
-    resp = requests.post(f"http://{DEVICE_HOST}:8081/zeroconf/{function}", 
-            json=payload, headers={'Connection': 'close'}, timeout=5)
+    resp = requests.post(url, json=epayload, headers={'Connection': 'close'}, timeout=5)
     
     print(resp.json())
+    
