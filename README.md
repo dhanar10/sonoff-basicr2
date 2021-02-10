@@ -1,6 +1,6 @@
 # sonoff-basicr2
 
-A simple python script for controlling SONOFF BASICR2
+A simple python script for controlling SONOFF BASICR2 (tested on firmware v3.5.0)
 
 ## Usage
 
